@@ -34,6 +34,7 @@ Route::get('detail/{id}', [LandingController::class, 'detail'])->name('detail.la
 Route::get('explore', [LandingController::class, 'explore'])->name('explore.landing');
 Route::resource('/', LandingController::class);
 
+
 Route::group(
     ['prefix' => 'member', 'as' => 'member.', 'middleware' => ['auth:sanctum', 'verified']],
     function () {
