@@ -14,7 +14,7 @@ class LandingController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.landing.index');
     }
 
     /**
@@ -83,15 +83,15 @@ class LandingController extends Controller
         //
     }
 
-    // Custom
+    /* CUSTOM LANDING */
     public function explore()
     {
-        //
+        return view ('pages.landing.explore');
     }
 
     public function detail($id)
     {
-        //
+        return view ('pages.landing.detail');
     }
 
     public function booking($id)
@@ -103,6 +103,8 @@ class LandingController extends Controller
     {
         //
     }
+
+    /* END CUSTOM LANDING */
 
 
 }
