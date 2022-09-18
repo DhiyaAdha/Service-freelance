@@ -77,4 +77,6 @@
         </div>
     </div>
 </div>
-<div class="hidden opacity-75 fixed inset-0 z-40 bg-black" id="registerModal-backdrop"></div>
+<div class="hidden opacity-75 fixed inset-0 z-40 bg-black" id="registerModal-backdrop">
+    
+</div>
