@@ -14,7 +14,8 @@ class MyOrderController extends Controller
      */
     public function index()
     {
-        //
+        // mengarahkan pada view nya
+        return view ('pages.dashboard.order.index');
     }
 
     /**
@@ -46,7 +47,7 @@ class MyOrderController extends Controller
      */
     public function show($id)
     {
-        //
+        return view ('pages.dashboard.order.detail');
     }
 
     /**
@@ -57,7 +58,7 @@ class MyOrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view ('pages.dashboard.order.edit');
     }
 
     /**
