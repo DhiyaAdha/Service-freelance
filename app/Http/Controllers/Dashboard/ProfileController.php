@@ -139,38 +139,33 @@ class ProfileController extends Controller
         $user->update($data_profile);
 
         // proses save to detail_user
-        $detail_user = DetailUser::find($user->detail_user_id->id);
+        $detail_user = DetailUser::find($user->detail_user->id);
         $detail_user->update($data_detail_user);
 
+
         // proses save to experience
-        $experience_user_id = ExperienceUser::where('detail_user_id', $detail_user['id'])->get();
+        $experience_user_id = ExperienceUser::where('detail_user_id', $detail_user['id'])->first();
         if(isset($experience_user_id)){
 
-            foreach($data_profile['experience'] as $key => $value){
-
+            foreach ($data_profile['experience'] as $key => $value) {
                 $experience_user = ExperienceUser::find($key);
                 $experience_user->detail_user_id = $detail_user['id'];
                 $experience_user->experience = $value;
                 $experience_user->save();
             }
 
-        } else {
-
+        }else{
             /* jika tdk ada akan dibuatkan id, 
             jika ada hanya replace fotonya */
-            foreach($data_profile['experience'] as $key => $value){
-
-                if(isset ($value)){
-                
-                
+            
+            foreach ($data_profile['experience'] as $key => $value) {
+                if(isset($value)){
                     $experience_user = new ExperienceUser;
                     $experience_user->detail_user_id = $detail_user['id'];
                     $experience_user->experience = $value;
                     $experience_user->save();
                 }
-
             }
-
 
         }
 
