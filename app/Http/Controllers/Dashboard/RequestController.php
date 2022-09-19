@@ -2,11 +2,37 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+// model
+use App\Models\User;
+use App\Models\Order;
+use App\Models\Service;
+use App\Models\OrderStatus;
+
+
+// request validation
+use App\Models\ExperienceUser;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+// storage
+use Illuminate\Support\Facades\Auth;
+
+// request response
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+// Helper
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class RequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +40,11 @@ class RequestController extends Controller
      */
     public function index()
     {
-        return view ('pages.dashboard.request.index');
+        $orders = Order::where('buyer_id', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            return view('pages.dashboard.request.index', compact('orders'));
     }
 
     /**
@@ -24,7 +54,7 @@ class RequestController extends Controller
      */
     public function create()
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -35,7 +65,7 @@ class RequestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -46,7 +76,10 @@ class RequestController extends Controller
      */
     public function show($id)
     {
-        return view ('pages.dashboard.request.detail');
+        //detail
+        $order = Order::where('id', $id)->first();
+
+        return view ('pages.dashboard.request.detail', compact('order'));
     }
 
     /**
@@ -57,7 +90,7 @@ class RequestController extends Controller
      */
     public function edit($id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -69,7 +102,7 @@ class RequestController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -80,13 +113,25 @@ class RequestController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return abort(404);
+
     }
 
-    // custom
+    // CUSTOM
+    
+    /* approve 
+    sudah melakukan pembayaran */
     public function approve($id)
     {
-        //
+        $order = Order::where('id', $id)->first();
+
+        //update order
+        $order = Order::find($order['id']);
+        $order->order_status_id = 1;
+        $order->save();
+
+        toast()->success('Approved has been success');
+        return redirect()->route('dashboard.request.index');
     }
 
     

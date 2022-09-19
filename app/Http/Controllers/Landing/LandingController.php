@@ -2,8 +2,28 @@
 
 namespace App\Http\Controllers\Landing;
 
+// model
+use App\Models\Order;
+use App\Models\Service;
+use App\Models\AdvantageUser;
+use App\Models\AdvantageService;
+use App\Models\Tagline;
+use App\Models\ThumbnailService;
+
+// request validation
+use App\Models\ExperienceUser;
 use App\Http\Controllers\Controller;
+
+// storage
+use Illuminate\Support\Facades\Auth;
+
+// request response
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+
+// Helper
+use Illuminate\Support\Facades\Auth as FacadesAuth;
+
 
 class LandingController extends Controller
 {
@@ -14,7 +34,9 @@ class LandingController extends Controller
      */
     public function index()
     {
-        return view('pages.landing.index');
+        $services = Service::orderBy('created_at', 'desc')->get();
+
+        return view('pages.landing.index', compact('services'));
     }
 
     /**
@@ -24,7 +46,7 @@ class LandingController extends Controller
      */
     public function create()
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -35,7 +57,7 @@ class LandingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -46,7 +68,7 @@ class LandingController extends Controller
      */
     public function show($id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -57,7 +79,7 @@ class LandingController extends Controller
      */
     public function edit($id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -69,7 +91,7 @@ class LandingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -80,29 +102,63 @@ class LandingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return abort(404);
     }
 
     /* CUSTOM LANDING */
     public function explore()
     {
-        return view ('pages.landing.explore');
+        $services = Service::orderBy('created_at', 'desc')->get();
+
+        return view('pages.landing.index', compact('services'));
     }
 
     public function detail($id)
     {
-        return view ('pages.landing.detail');
+        $service = Service::where('id', $id)->first();
+
+        $thumbnail = ThumbnailService::where('service_id', $id)->get();
+        $advantage_user = AdvantageUser::where('service_id', $id)->get();
+        $advantage_service = AdvantageService::where('service_id', $id)->get();
+        $tagline = Tagline::where('service_id', $id)->get();
+
+        return view('pages.landing.detail', compact('service', 'thumbnail', 'advantage_user', 'advantage_service', 'tagline'));
     }
 
+    // fungsi Booking 
     public function booking($id)
     {
-        //
+        $service = Service::where('id', $id)->first();
+        $user_buyer = Auth::user()->id;
+
+        // validation booking (pembatasan booking)
+        if($service->users_id == $user_buyer) {
+            toast()->warning('Sorry, members cannot book their own service!');
+            return back();
+        }
+
+        $order = new Order;
+        $order->buyer_id = $user_buyer;
+        $order->freelancer_id = $service->user->id;
+        $order->service_id = $service->id;
+        $order->file = NULL;
+        $order->note = NULL;
+        $order->expired = Date('y-m-d', strtotime('+3 days'));
+        $order->order_status_id = 4;
+        $order->save();
+
+        $order_detail = Order::where('id', $order->id)->first();
+
+        return redirect()->route('detail.booking.landing', $order->id);
     }
 
     public function detail_booking($id)
     {
-        //
+        $order = Order::where('id', $id)->first();
+
+        return view('pages.landing.booking', compact('order'));
     }
+
 
     /* END CUSTOM LANDING */
 
