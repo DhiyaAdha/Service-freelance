@@ -2,15 +2,10 @@
 
 namespace App\Http\Requests\Dashboard\Service;
 
-// model
 use App\Models\Service;
-
-// illuminate
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\HttpFoundaation\Response;
+use Illuminate\Validation\Rule;
 
 class StoreServiceRequest extends FormRequest
 {
@@ -27,41 +22,29 @@ class StoreServiceRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function rules()
     {
         return [
             'title' => [
-                'required',
-                'string',
-                'max:255',
+                'required', 'string', 'max:255',
             ],
             'description' => [
-                'nullable',
-                'string',
-                'max:5000',
+                'nullable', 'string', 'max:5000',
             ],
             'delivery_time' => [
-                'required',
-                'integer',
-                'max:100',
+                'required', 'integer', 'max:100',
             ],
-            'revision_time' => [
-                'required',
-                'integer',
-                'max:100',
+            'revision_limit' => [
+                'required', 'integer', 'max:100',
             ],
             'price' => [
-                'required',
-                'string',
+                'required', 'string',
             ],
             'note' => [
-                'nullable',
-                'string',
-                'max:5000',
+                'nullable', 'string', 'max:5000',
             ],
-
         ];
     }
 }
